@@ -10,7 +10,7 @@
       margin: 0;
       padding: 20px;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #e3f2fd; /* Bleu doux */
+      background-color: #e3f2fd;
     }
 
     .table-wrapper {
@@ -46,7 +46,11 @@
 
     .text-right {
       text-align: right;
-    }
+    } @media (max-width: 768px) {
+  .container-custom {
+    margin-top: 20px;
+  }
+}
   </style>
 </head>
 
@@ -54,7 +58,7 @@
 
   <div class="table-wrapper">
     <h2 class="text-center mb-4">Liste des Associations Stagiaires / Encadreurs</h2>
-    <table class="table table-bordered table-striped">
+    <div class="table-responsive"><table class="table table-bordered table-striped">
       <thead class="table-primary">
         <tr>
           <th>Nom du Stagiaire</th>
@@ -67,7 +71,7 @@
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
-    </table>
+    </table></div> 
   </div>
 
   <div class="container-row">

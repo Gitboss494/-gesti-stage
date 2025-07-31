@@ -57,15 +57,16 @@
       border-radius: 4px;
     }
 
+    /* Sidebar fixe grands écrans */
     .sidebar {
-      position: fixed;
-      top: 100px;
-      left: 0;
-      width: 220px;
-      height: 100%;
       background-color: lightblue;
       border-right: 1px solid #ddd;
       padding-top: 20px;
+      position: fixed;
+      top: 100px; /* hauteur navbar */
+      left: 0;
+      width: 220px;
+      height: calc(100vh - 100px);
       z-index: 998;
     }
 
@@ -104,8 +105,14 @@
     }
 
     .main-content {
-      margin-left: 240px;
+      margin-left: 0;
       padding: 30px;
+    }
+
+    @media (min-width: 992px) {
+      .main-content {
+        margin-left: 240px; 
+      }
     }
 
     h1 {
@@ -132,6 +139,10 @@
     <a class="navbar-brand" href="#">
       <img src="monapp.png" alt="Logo" height="60" />
     </a>
+    <button class="btn btn-outline-dark d-lg-none ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+      <i class="bi bi-list"></i> Menu
+    </button>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -146,19 +157,31 @@
   </div>
 </nav>
 
-<div class="sidebar">
+<!-- Sidebar Offcanvas petits écrans -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sidebarMenuLabel">Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+  </div>
+  <div class="offcanvas-body">
+    <a href="index.html" class="d-block mb-2"><i class="bi bi-house-door-fill"></i> Accueil</a>
+    <a href="#" id="btn-association-sm" class="d-block mb-2"><i class="bi bi-arrow-left-right"></i> Associer</a>
+    <a href="#" id="btn-supervision-sm" class="d-block"><i class="bi bi-person-badge"></i> Superviser stages</a>
+  </div>
+</div>
+
+<!-- Sidebar fixe grands écrans -->
+<nav class="sidebar d-none d-lg-block">
   <a href="index.html"><i class="bi bi-house-door-fill"></i> Accueil</a>
   <a href="#" id="btn-association"><i class="bi bi-arrow-left-right"></i> Associer</a>
-  <a href="#" id="btn-supervision">
-  <i class="bi bi-person-badge"></i> Superviser stages
-</a>
-</div>
+  <a href="#" id="btn-supervision"><i class="bi bi-person-badge"></i> Superviser stages</a>
+</nav>
 
 <div class="main-content">
   <h1 style="text-align: center;">Bienvenue dans votre espace de gestion. Agissez selon vos besoins</h1>
   <p style="height: 700px;">
     <a class="navbar-brand" href="#">
-      <img src="entreprise.jpg" alt="Logo" height="569" class="logo-rotate" />
+      <img src="entreprise.jpg" alt="Logo" height="569" class="logo-rotate img-fluid" />
     </a>
   </p>
 </div>
@@ -189,42 +212,88 @@
     localStorage.setItem("disciple", JSON.stringify(disciple));
     localStorage.setItem("encadreurs", JSON.stringify(encadreurs));
     localStorage.setItem("role", "Directeur");
-    const btnAssociation = document.getElementById("btn-association");
+
     const role = localStorage.getItem("role");
-    if (role === "Directeur" || role === "Chargé de la gestion des stages") {
-      btnAssociation.style.pointerEvents = "auto";
-      btnAssociation.style.opacity = "1";
-      btnAssociation.onclick = function () {
-        const code = prompt("Veuillez entrer le code d'accès à l'association des stagiaires :");
-        if (code === "GESTI2025") {
-          window.location.href = "association.html";
-        } else if (code !== null) {
-          alert("Code incorrect. Veuillez réessayer.");
-        }
-      };
-    } else {
-      btnAssociation.style.pointerEvents = "none";
-      btnAssociation.style.opacity = "0.5";
-      btnAssociation.title = "Accès réservé au Directeur ou Chargé de gestion";
+    const btnAssociation = document.getElementById("btn-association");
+    if (btnAssociation) {
+      if (role === "Directeur" || role === "Chargé de la gestion des stages") {
+        btnAssociation.style.pointerEvents = "auto";
+        btnAssociation.style.opacity = "1";
+        btnAssociation.onclick = function () {
+          const code = prompt("Veuillez entrer le code d'accès à l'association des stagiaires :");
+          if (code === "GESTI2025") {
+            window.location.href = "association.html";
+          } else if (code !== null) {
+            alert("Code incorrect. Veuillez réessayer.");
+          }
+        };
+      } else {
+        btnAssociation.style.pointerEvents = "none";
+        btnAssociation.style.opacity = "0.5";
+        btnAssociation.title = "Accès réservé au Directeur ou Chargé de gestion";
+      }
     }
+    const btnAssocSm = document.getElementById("btn-association-sm");
+    if (btnAssocSm) {
+      if (role === "Directeur" || role === "Chargé de la gestion des stages") {
+        btnAssocSm.style.pointerEvents = "auto";
+        btnAssocSm.style.opacity = "1";
+        btnAssocSm.onclick = function () {
+          const code = prompt("Veuillez entrer le code d'accès à l'association des stagiaires :");
+          if (code === "GESTI25.W") {
+            window.location.href = "association.html";
+          } else if (code !== null) {
+            alert("Code incorrect. Veuillez réessayer.");
+          }
+        };
+      } else {
+        btnAssocSm.style.pointerEvents = "none";
+        btnAssocSm.style.opacity = "0.5";
+        btnAssocSm.title = "Accès réservé au Directeur ou Chargé de gestion";
+      }
+    }
+
+    // Bouton supervision grands écrans
     const btnSupervision = document.getElementById("btn-supervision");
-    btnSupervision.addEventListener("click", function (e) {
-      e.preventDefault();
+    if (btnSupervision) {
+      btnSupervision.addEventListener("click", function (e) {
+        e.preventDefault();
 
-      const nom = prompt("Entrez votre nom complet :");
-      if (!nom) return alert("Nom requis.");
+        const nom = prompt("Entrez votre nom complet :");
+        if (!nom) return alert("Nom requis.");
 
-      const telephone = prompt("Entrez votre numéro de téléphone :");
-      if (!telephone) return alert("Téléphone requis.");
+        const telephone = prompt("Entrez votre numéro de téléphone :");
+        if (!telephone) return alert("Téléphone requis.");
 
-      const email = prompt("Entrez votre adresse e-mail :");
-      if (!email) return alert("Email requis.");
+        const email = prompt("Entrez votre adresse e-mail :");
+        if (!email) return alert("Email requis.");
 
-      const superviseur = { nom, telephone, email };
-      localStorage.setItem("superviseur", JSON.stringify(superviseur));
+        const superviseur = { nom, telephone, email };
+        localStorage.setItem("superviseur", JSON.stringify(superviseur));
 
-      window.location.href = "suivi.html";
-    });
+        window.location.href = "suivi.html";
+      });
+    }
+    const btnSuperSm = document.getElementById("btn-supervision-sm");
+    if (btnSuperSm) {
+      btnSuperSm.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const nom = prompt("Entrez votre nom complet :");
+        if (!nom) return alert("Nom requis.");
+
+        const telephone = prompt("Entrez votre numéro de téléphone :");
+        if (!telephone) return alert("Téléphone requis.");
+
+        const email = prompt("Entrez votre adresse e-mail :");
+        if (!email) return alert("Email requis.");
+
+        const superviseur = { nom, telephone, email };
+        localStorage.setItem("superviseur", JSON.stringify(superviseur));
+
+        window.location.href = "suivi.html";
+      });
+    }
   };
 </script>
 
